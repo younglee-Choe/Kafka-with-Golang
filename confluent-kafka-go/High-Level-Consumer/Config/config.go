@@ -1,12 +1,12 @@
 package Config
 
 import (
-    "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 func Kafka() *kafka.Consumer {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap {
-		"bootstrap.servers": "203.247.240.235",
+		"bootstrap.servers": "localhost:9092",
 		"group.id":			 "myGroup",
 		"auto.offset.reset": "earliest",
 	})
