@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"encoding/json"
     "consumer/Config"
-	consumerStruct "consumer/structure"
+	consumerStruct "consumer/Structures"
 )
 
 func main() {
