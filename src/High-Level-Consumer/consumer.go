@@ -16,7 +16,6 @@ func main() {
 	defer c.Close()
 
 	var customers consumerStruct.Customers
-	
 	for {
 		msg, err := c.ReadMessage(-1)
 		if err == nil {
