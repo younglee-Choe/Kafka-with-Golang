@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-    fmt.Println("🫧 Kafka Producer;")
+    fmt.Println("🫧 Kafka Producer")
 
 	p := Config.Kafka()
 	defer p.Close()
