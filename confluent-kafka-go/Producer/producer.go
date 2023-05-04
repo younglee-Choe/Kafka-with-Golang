@@ -1,14 +1,16 @@
 package main
 
 import (
+	"os"
 	"fmt"
-	"math/rand"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"io/ioutil"
 	"producer/Config"
+	producerStruct "producer/structure"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 func main() {
-    fmt.Println("Kafka Producer Example")
+    fmt.Println("🫧 Kafka Producer;")
 
 	p := Config.Kafka()
 	defer p.Close()
@@ -22,7 +24,6 @@ func main() {
 				if ev.TopicPartition.Error != nil {
 					fmt.Printf("❗️Failed to deliver message: %v\n", ev.TopicPartition)
 				} else {
-					// fmt.Printf("Delivery message to %v\n", ev.TopicPartition)
 					fmt.Printf("Produced event to topic %s: key = %-10s value = %s\n",
 					*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
 				}
@@ -33,16 +34,28 @@ func main() {
 	// Produce messages to topic (asynchronously)
 	topic := "purchases"
 
-	users := [...]string{"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"}
-    items := [...]string{"book", "alarm clock", "t-shirts", "gift card", "batteries"}
+	jsonFile, err := os.Open("../customers.json")
+	if err != nil {
+		fmt.Println("Failed to open file;", err)
+	} else {
+		fmt.Println("Successfully Opened JSON file!")
+	}
+	defer jsonFile.Close()
 
-	for n := 0; n < 10; n++ {
-        key := users[rand.Intn(len(users))]
-        data := items[rand.Intn(len(items))]
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var customers producerStruct.Customers
+	// json.Unmarshal(byteValue, &customers)
+
+	for n := 0; n < len(customers.Customer)+1; n++ {
+        // data, err := json.Marshal(customers.Customer[n])		// Marshal: JSON -> []bytes
+        // if err != nil {
+        //     fmt.Printf("Failed to serialize!")
+        // }
         p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-            Key:            []byte(key),
-            Value:          []byte(data),
+            // Key:            []byte(data),
+            Value:          byteValue,
         }, nil)
 	}
 
