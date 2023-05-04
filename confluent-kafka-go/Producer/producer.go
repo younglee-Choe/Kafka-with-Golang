@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"producer/Config"
-	producerStruct "producer/structure"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
@@ -44,17 +43,9 @@ func main() {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	var customers producerStruct.Customers
-	// json.Unmarshal(byteValue, &customers)
-
-	for n := 0; n < len(customers.Customer)+1; n++ {
-        // data, err := json.Marshal(customers.Customer[n])		// Marshal: JSON -> []bytes
-        // if err != nil {
-        //     fmt.Printf("Failed to serialize!")
-        // }
-        p.Produce(&kafka.Message{
+	if byteValue != nil {
+		p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-            // Key:            []byte(data),
             Value:          byteValue,
         }, nil)
 	}
