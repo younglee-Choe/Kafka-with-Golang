@@ -1,0 +1,28 @@
+{
+    "customers": [
+      {
+        "name": "leele",
+        "age": 24,
+        "items": {
+          "snack": "a",
+          "fruit": "apple"
+        }
+      },
+      {
+        "name": "Fraser",
+        "age": 17,
+        "items": {
+          "snack": "b",
+          "fruit": "banana"
+        }
+      },
+      {
+        "name": "Elliot",
+        "age": 23,
+        "items": {
+          "snack": "c",
+          "fruit": "c"
+        }
+      }
+    ]
+}
