@@ -1,0 +1,30 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    hostname: kafka
+    build: .
+    ports:
+      - "9092:9092"
+    environment:
+      DOCKER_API_VERSION: 1.22
+      KAFKA_ADVERTISED_HOST_NAME: {HOSTNAME}
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      HOST: {HOSTNAME}
+      KAFKA_BROKERCONNECT: "kafka:9092"
+      JVM_OPTS: "-Xms32M -Xmx64M"
+    depends_on:
+      - kafka
