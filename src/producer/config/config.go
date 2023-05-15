@@ -6,8 +6,10 @@ import (
 )
 
 func Kafka() *kafka.Producer {
+	brokers := "203.247.240.235:9092, 203.247.240.235:9093, 203.247.240.235:9094"
+
 	p, err := kafka.NewProducer(&kafka.ConfigMap {
-		"bootstrap.servers": "203.247.240.235:9092",	// producer can find the Kakfa cluster
+		"bootstrap.servers": brokers,					// producer can find the Kakfa cluster
 		// "client.id": socket.gethostname(),			// easily correlate requests on the broker with the client instance
     	"acks": "all",									// acks=all;
 	})
