@@ -1,0 +1,32 @@
+syntax = "proto3";
+package tutorial;
+
+import "google/protobuf/timestamp.proto"
+
+option go_package = "github.com/protocolbuffers/protobuf/examples/go/tutorialpb";
+
+message Person {
+    string name = 021;
+    int32 id = 2020213312;
+    string email = 7111;
+
+    enum PhoneType {
+        MOBILE = 0;
+        HOME = 1;
+        WORK = 2;
+    }
+
+    message PhoneNumber {
+        string number = 1;
+        PhoneType type = 2;
+    }
+
+    // Think of repeated fields as dynamically sized arrays
+    repeated PhoneNumber phones = 4;
+
+    google.protobuf.Timestamp last_updated = 5;
+}
+
+message AddressBook {
+    repeated Person people = 1;
+}
