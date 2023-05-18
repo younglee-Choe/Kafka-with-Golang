@@ -1,12 +1,13 @@
 package producer3
 
 import (
-	// "os"
 	"fmt"
 	"net/http"
 	"io/ioutil"
-	"main/producer/config"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+
+	"main/producer/config"
 )
 
 func Producer() {
@@ -24,7 +25,7 @@ func Producer() {
 				if ev.TopicPartition.Error != nil {
 					fmt.Printf("❗️Failed to deliver message: %v\n", ev.TopicPartition)
 				} else {
-					fmt.Printf("🌿Produced event to topic %s: key = %-10s value = %s\n",
+					fmt.Printf("🌿 Produced event to topic %s: key = %-10s value = %s\n",
 					*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
 				}
 			}
@@ -32,10 +33,10 @@ func Producer() {
 	}()
 
 	// Produce messages to topic (asynchronously)
-	topic := "purchases"
+	topic := "topic2"
 
 	// using mockAPI
-	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/customers")
+	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/street")
 	if err != nil {
 		fmt.Println("❗️error;", err)
 		panic(err)

@@ -4,8 +4,10 @@ import (
 	"os"
 	"fmt"
 	"io/ioutil"
-	"main/producer/config"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+
+	"main/producer/config"
 )
 
 func Producer() {
@@ -23,7 +25,7 @@ func Producer() {
 				if ev.TopicPartition.Error != nil {
 					fmt.Printf("❗️Failed to deliver message: %v\n", ev.TopicPartition)
 				} else {
-					fmt.Printf("🌿Produced event to topic %s: key = %-10s value = %s\n",
+					fmt.Printf("🌿 Produced event to topic %s: key = %-10s value = %s\n",
 					*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
 				}
 			}
@@ -32,10 +34,10 @@ func Producer() {
 
 	// Produce messages to topic (asynchronously)
 	// generate topic to send events
-	topic := "purchases"
+	topic := "topic0"
 
 	// using JSON file
-	jsonFile, err := os.Open("./input-data/customers.json")
+	jsonFile, err := os.Open("./input_data/customers.json")
 	if err != nil {
 		fmt.Println("❗️Failed to open file;", err)
 	} else {
@@ -43,12 +45,13 @@ func Producer() {
 	}
 	defer jsonFile.Close()
 
+	// key := "before"
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	if byteValue != nil {
 		p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			// Key:			[]byte(key)
+			// Key:			[]byte(key),
             Value:          byteValue,
         }, nil)
 	} else {
