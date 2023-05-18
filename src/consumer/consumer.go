@@ -6,23 +6,22 @@ import (
 )
 
 func main() {
-    fmt.Println("🫧 Kafka Consumer")
+    fmt.Println("🫧  Kafka Consumer")
 
 	c := config.Kafka()
 
 	// subscribe topic or multiple tipics
-	c.SubscribeTopics([]string{"boss_topic"}, nil)
+	c.SubscribeTopics([]string{"leele-topic"}, nil)
 	defer c.Close()
 
-	// var customers structures.Customers
 	for {
-		// ReadMessage polls the consumer for a message.
+		// ReadMessage polls the consumer for a message
 		msg, err := c.ReadMessage(-1)
 		if err == nil {
 			// msg.TopicPartition provides partition-specific information (such as topic, partition and offset).
-			fmt.Printf("🍺 Received message %s: key=%s, vlaue=%s\n", msg.TopicPartition, msg.Key, msg.Value)
+			fmt.Printf("✅ Received message %s: key=%s, vlaue=%s\n", msg.TopicPartition, msg.Key, msg.Value)
 		} else {
-			fmt.Printf("❗️Consumer error: %v (%v)\n", err, msg)
-	}
+			fmt.Printf("❗️ Consumer error: %v (%v)\n", err, msg)
+		}
 	}
 }
