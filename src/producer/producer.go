@@ -11,7 +11,7 @@ import (
 )
 
 func Producer() {
-    fmt.Println("🫧 Kafka Producer")
+	fmt.Println("🫧  Kafka Producer")
 
 	p := config.Kafka()
 	defer p.Close()
@@ -23,9 +23,9 @@ func Producer() {
 			switch ev := e.(type) {
 			case *kafka.Message:
 				if ev.TopicPartition.Error != nil {
-					fmt.Printf("❗️Failed to deliver message: %v\n", ev.TopicPartition)
+					fmt.Printf("❗️ Failed to deliver message: %v\n", ev.TopicPartition)
 				} else {
-					fmt.Printf("🌿 Produced event to topic %s: key = %-10s value = %s\n",
+					fmt.Printf("✨ Produced event to topic %s: key = %-10s value = %s\n",
 					*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
 				}
 			}
@@ -39,13 +39,12 @@ func Producer() {
 	// using JSON file
 	jsonFile, err := os.Open("./input_data/customers.json")
 	if err != nil {
-		fmt.Println("❗️Failed to open file;", err)
+		fmt.Println("❗️ Failed to open file;", err)
 	} else {
 		fmt.Println("Successfully Opened JSON file!")
 	}
 	defer jsonFile.Close()
 
-	// key := "before"
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	if byteValue != nil {
@@ -55,7 +54,7 @@ func Producer() {
             Value:          byteValue,
         }, nil)
 	} else {
-		fmt.Printf("❗️There is no data to send to Kafka")
+		fmt.Printf("❗️ There is no data to send to Kafka")
 	}
 
 	// Wait for message deliveries before shutting down
