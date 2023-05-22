@@ -49,12 +49,13 @@ func processAndProduce(message *kafka.Message, p *kafka.Producer) {
 		}
 	}()
 	
+	key := message.Key
 	processedData := filterSlice(message.Value, "Mohammad Mill")
 
 	topic := "leele-topic"
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-		// Key:			[]byte(key),
+		Key:			[]byte(key),
 		Value:          []byte(processedData),
 	}, nil)
 }
@@ -74,6 +75,7 @@ func main() {
 		msg, err := c.ReadMessage(-1)
 		if err == nil {
 			// json.Unmarshal(msg.Value, &customers)
+			fmt.Printf("✅ Received message %s: \n", msg.TopicPartition)
 			processAndProduce(msg, p)
 		} else {
 			fmt.Printf("❗️ Consumer error: %v (%v)\n", err, msg)
