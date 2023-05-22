@@ -30,7 +30,7 @@ func Producer() {
 		}
 	}()
 
-	topic := "topic2"
+	topic := "topicC"
 
 	// using mockAPI
 	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/street")

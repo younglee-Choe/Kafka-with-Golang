@@ -34,7 +34,7 @@ func Producer() {
 
 	// Produce messages to topic (asynchronously)
 	// generate topic to send events
-	topic := "topic0"
+	topic := "topicA"
 
 	// using JSON file
 	jsonFile, err := os.Open("./input_data/customers.json")

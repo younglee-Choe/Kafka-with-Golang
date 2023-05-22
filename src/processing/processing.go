@@ -67,7 +67,7 @@ func main() {
 	defer p.Close()
 
 	c := config.Kafka()
-	c.SubscribeTopics([]string{"topic0", "topic1", "topic2"}, nil)
+	c.SubscribeTopics([]string{"topicA", "topicB", "topicC"}, nil)
 	defer c.Close()
 
 	for {
