@@ -45,12 +45,13 @@ func Producer() {
 	}
 	defer jsonFile.Close()
 
+	key := "customers"
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	if byteValue != nil {
 		p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			// Key:			[]byte(key),
+			Key:			[]byte(key),
             Value:          byteValue,
         }, nil)
 	} else {

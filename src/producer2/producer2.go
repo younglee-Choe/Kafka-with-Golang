@@ -46,10 +46,12 @@ func Producer() {
 		panic(err)
 	}
 
+	key := "tasks"
+
 	if data != nil {
 		p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			// Key:			[]byte(key),
+			Key:			[]byte(key),
             Value:          data,
         }, nil)
 	}
