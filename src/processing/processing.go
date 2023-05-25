@@ -13,22 +13,49 @@ import (
 
 // Filter messages that match conditions
 func filterSlice(slice []byte, condition string) []byte {
-	var streets []structures.Street
+	var person []structures.Person
 
-	err := json.Unmarshal(slice, &streets)
+	err := json.Unmarshal(slice, &person)
 	if err != nil {
 		fmt.Println("❗️ Unmarshal error:", err)
 	}
-	
-	filteredData := make([]structures.Street, 0)
+	filteredData := make([]structures.Person, 0)
 
-	for _, item := range streets {
+	for _, item := range person {
 		if item.Name == condition {
 			filteredData = append(filteredData, item)
 		}
 	}
 
 	fmt.Printf("⚙️  Filtered Data: %s \n", filteredData)
+	marshaledData, _ := json.Marshal(filteredData)
+
+	return marshaledData
+}
+
+// Find someting different value
+func findDifferentValue(slice []byte) []byte {
+	var blocks []structures.Block
+
+	err := json.Unmarshal(slice, &blocks)
+	if err != nil {
+		fmt.Println("❗️ Unmarshal error:", err)
+	}
+
+	filteredData := make([]structures.Block, 0)
+
+	referenceValue := blocks[0].Value
+	matchingData := []structures.Block{}
+
+	for _, d := range blocks {
+		if d.Value == referenceValue {
+			matchingData = append(matchingData, d)
+		}
+	}
+
+	for _, d := range matchingData {
+		filteredData = append(filteredData, d)
+	}
 	marshaledData, _ := json.Marshal(filteredData)
 
 	return marshaledData
@@ -48,11 +75,12 @@ func processAndProduce(message *kafka.Message, p *kafka.Producer) {
 			}
 		}
 	}()
-	
-	key := message.Key
-	processedData := filterSlice(message.Value, "Mohammad Mill")
 
-	topic := "leele-topic"
+	processedData := filterSlice(message.Value, "Charlie")
+	// processedData := findDifferentValue(message.Value)
+
+	key := message.Key
+	topic := "topicZ"
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 		Key:			[]byte(key),
