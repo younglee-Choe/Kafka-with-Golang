@@ -1,13 +1,14 @@
 package main
 
 import (
+	"time"
 	"sync"
 	"main/producer"
 	"main/producer2"
 	"main/producer3"
 )
 
-func main() {
+func callProducers() {
 	// generate WaitGroup
 	// Used to synchronize goroutines
 	var wg sync.WaitGroup
@@ -30,4 +31,10 @@ func main() {
 	}()
 
 	wg.Wait()
+}
+
+func main() {
+	for range time.Tick(1 * time.Second) {
+		callProducers()
+	}
 }
