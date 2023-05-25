@@ -4,6 +4,16 @@ package structures
 // 	Task []Task `json:"tasks"`
 // }
 
+type Block struct {
+	Id string `json:"id"`
+	Value string `json:"value"`
+}
+
+type Person struct {
+	Name string `json:"name"`
+	Account string `json:"account"`
+}
+
 type Task struct {
     CreatedAt string	`json:"createdAt"`
     Name string			`json:"name"`
