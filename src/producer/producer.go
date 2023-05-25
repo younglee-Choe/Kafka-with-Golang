@@ -1,9 +1,10 @@
 package producer
 
 import (
-	"os"
+	// "os"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 
@@ -36,23 +37,38 @@ func Producer() {
 	// generate topic to send events
 	topic := "topicA"
 
-	// using JSON file
-	jsonFile, err := os.Open("./input_data/customers.json")
+	// // using JSON file
+	// jsonFile, err := os.Open("./input_data/blocks.json")
+	// if err != nil {
+	// 	fmt.Println("❗️ Failed to open file;", err)
+	// } else {
+	// 	fmt.Println("Successfully Opened JSON file!")
+	// }
+	// defer jsonFile.Close()
+	// data, _ := ioutil.ReadAll(jsonFile)
+
+
+	// using mockAPI
+	res, err := http.Get("https://646afaee7d3c1cae4ce2f8af.mockapi.io/api/mock2/blocks")
 	if err != nil {
-		fmt.Println("❗️ Failed to open file;", err)
-	} else {
-		fmt.Println("Successfully Opened JSON file!")
+		fmt.Println("❗️ error;", err)
+		panic(err)
 	}
-	defer jsonFile.Close()
+	defer res.Body.Close()
 
-	key := "customers"
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	data, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("❗️ error;", err)
+		panic(err)
+	}
+	
+	key := "blocks"
 
-	if byteValue != nil {
+	if data != nil {
 		p.Produce(&kafka.Message{
             TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 			Key:			[]byte(key),
-            Value:          byteValue,
+            Value:          data,
         }, nil)
 	} else {
 		fmt.Printf("❗️ There is no data to send to Kafka")
