@@ -30,10 +30,10 @@ func Producer() {
 		}
 	}()
 
-	topic := "topicC"
+	topic := "leele-topic"
 
 	// using mockAPI
-	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/street")
+	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/tasks")
 	if err != nil {
 		fmt.Println("❗️ error;", err)
 		panic(err)
@@ -46,7 +46,7 @@ func Producer() {
 		panic(err)
 	}
 
-	key := "street"
+	key := "3producer"
 
 	if data != nil {
 		p.Produce(&kafka.Message{

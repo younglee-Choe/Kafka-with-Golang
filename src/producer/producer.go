@@ -35,7 +35,7 @@ func Producer() {
 
 	// Produce messages to topic (asynchronously)
 	// generate topic to send events
-	topic := "topicA"
+	topic := "leele-topic"
 
 	// // using JSON file
 	// jsonFile, err := os.Open("./input_data/blocks.json")
@@ -49,7 +49,7 @@ func Producer() {
 
 
 	// using mockAPI
-	res, err := http.Get("https://646afaee7d3c1cae4ce2f8af.mockapi.io/api/mock2/blocks")
+	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/tasks")
 	if err != nil {
 		fmt.Println("❗️ error;", err)
 		panic(err)
@@ -62,7 +62,7 @@ func Producer() {
 		panic(err)
 	}
 	
-	key := "blocks"
+	key := "1producer"
 
 	if data != nil {
 		p.Produce(&kafka.Message{

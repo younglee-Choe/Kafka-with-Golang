@@ -30,7 +30,7 @@ func Producer() {
 		}
 	}()
 
-	topic := "topicB"
+	topic := "leele-topic"
 
 	// using mockAPI
 	res, err := http.Get("https://6458779a4eb3f674df75126b.mockapi.io/api/mock/tasks")
@@ -46,7 +46,7 @@ func Producer() {
 		panic(err)
 	}
 
-	key := "tasks"
+	key := "2producer"
 
 	if data != nil {
 		p.Produce(&kafka.Message{
