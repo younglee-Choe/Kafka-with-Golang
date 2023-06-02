@@ -11,7 +11,7 @@ func main() {
 	c := config.Kafka()
 
 	// subscribe topic or multiple tipics
-	c.SubscribeTopics([]string{"topicZ"}, nil)
+	c.SubscribeTopics([]string{"leele-last-topic"}, nil)
 	defer c.Close()
 
 	for {
