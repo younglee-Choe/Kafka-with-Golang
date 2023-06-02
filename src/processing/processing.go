@@ -8,7 +8,6 @@ import (
 	
 	"main/structures"
 	"main/processing/config"
-	pConfig "main/producer/config"
 )
 
 // Filter messages that match conditions
@@ -80,7 +79,7 @@ func processAndProduce(message *kafka.Message, p *kafka.Producer) {
 	// processedData := findDifferentValue(message.Value)
 
 	key := message.Key
-	topic := "topicZ"
+	topic := "leele-last-topic"
 	p.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 		Key:			[]byte(key),
@@ -91,11 +90,11 @@ func processAndProduce(message *kafka.Message, p *kafka.Producer) {
 func main() {
 	fmt.Println("🫧  Consumer and Producer for data processing")
 
-	p := pConfig.Kafka()
+	p := config.KafkaProducer()
 	defer p.Close()
 
-	c := config.Kafka()
-	c.SubscribeTopics([]string{"topicA", "topicB", "topicC"}, nil)
+	c := config.KafkaConsumer()
+	c.SubscribeTopics([]string{"leele-topic"}, nil)
 	defer c.Close()
 
 	for {
