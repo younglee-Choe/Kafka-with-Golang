@@ -14,9 +14,10 @@ import (
 )
 
 var (
-	brokers             = []string{"127.0.0.1:9092"}
-	topic   goka.Stream = "leele6-topic"
-	group   goka.Group  = "leele6-group"
+	brokers             = []string{"kafkahost:9092"}
+	topic   goka.Stream = "topic"
+	topicRekeyed   goka.Stream = "topic-rekeyed"
+	group   goka.Group  = "goka-group"
 	st    storage.Storage
 
 	tmc *goka.TopicManagerConfig
@@ -73,19 +74,17 @@ func runEmitter() {
 	var i int
 	for range t.C {
 		key := fmt.Sprintf("user-%d", i%8)	
-		value := fmt.Sprintf("%d", i%8)	// Value: fountain encoded data
+		value := fmt.Sprintf("user%d", i%8)		// Value: fountain encoded data
 		emitter.EmitSync(key, value)
 		i++
 	}
 }
 
-// Store updated data to 'group-table' with key(is offset)
 func process(ctx goka.Context, msg interface{}) {
 	key := ctx.Offset()
 	ctx.Loopback(strconv.Itoa(int(key)), msg)
 }
 
-// Store decoded data to 'group-loop'
 func loopProcess(ctx goka.Context, msg interface{}) {
 	var u *user
 	if val := ctx.Value(); val != nil {
@@ -105,15 +104,30 @@ func loopProcess(ctx goka.Context, msg interface{}) {
 	}
 
 	ctx.SetValue(u)
-	msg = ctx.Value()
 
-	// fmt.Printf("✅Partition: %d, Offset: %d, Key: %s, Value: %s, msg: %v\n", ctx.Partition(), ctx.Offset(), ctx.Key(), ctx.Value(), msg)
+	// Try decoding
+	fountainDecoding(ctx)
+
+	fmt.Printf("Partition: %d, Offset: %d, Key: %s, Value: %s, msg: %v\n", ctx.Partition(), ctx.Offset(), ctx.Key(), ctx.Value(), msg)
+}
+
+func fountainDecoding(ctx goka.Context) {
+	// write decode part...
+	test := "20"
+
+	// write if-else; emit only decoded data
+	if ctx.Key() == test {
+		fmt.Println("‼️ Decoding Success")
+		ctx.Emit(topicRekeyed, ctx.Key(), "decoded data")
+	}
 }
 
 func runProcessor(initialized chan struct{}) {
 	g := goka.DefineGroup(group,
 		goka.Input(topic, new(codec.String), process),
 		goka.Loop(new(codec.String), loopProcess),
+		// goka.Output(topicRekeyed, new(userCodec)),
+		goka.Output(topicRekeyed, new(codec.String)),
 		goka.Persist(new(userCodec)),
 	)
 	p, err := goka.NewProcessor(brokers,
@@ -152,7 +166,7 @@ func main() {
 		log.Fatalf("Error creating topic manager: %v", err)
 	}
 	defer tm.Close()
-	err = tm.EnsureStreamExists(string(topic), 8)
+	err = tm.EnsureStreamExists(string(topic), defaultPartitionChannelSize)
 	if err != nil {
 		log.Printf("Error creating kafka topic %s: %v", topic, err)
 	}
