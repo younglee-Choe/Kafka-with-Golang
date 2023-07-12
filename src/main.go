@@ -1,11 +1,11 @@
 package main
 
 import (
-	"time"
+	"main/src/producer"
+	"main/src/producer2"
+	"main/src/producer3"
+	"main/src/producer4"
 	"sync"
-	"main/producer"
-	"main/producer2"
-	"main/producer3"
 )
 
 func callProducers() {
@@ -13,10 +13,10 @@ func callProducers() {
 	// Used to synchronize goroutines
 	var wg sync.WaitGroup
 
-	wg.Add(3)
+	wg.Add(4)
 
 	go func() {
-		defer wg.Done()		// signal the termination of a goroutine
+		defer wg.Done() // signal the termination of a goroutine
 		producer.Producer()
 	}()
 
@@ -30,11 +30,14 @@ func callProducers() {
 		producer3.Producer()
 	}()
 
+	go func() {
+		defer wg.Done()
+		producer4.Producer()
+	}()
+
 	wg.Wait()
 }
 
 func main() {
-	for range time.Tick(1 * time.Second) {
-		callProducers()
-	}
+	callProducers()
 }
