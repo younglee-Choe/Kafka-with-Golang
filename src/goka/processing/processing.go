@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	brokers                  = []string{"203.247.240.235:9092", "203.247.240.235:9093", "203.247.240.235:9094"}
+	brokers                  = []string{"kafkahost:9092"}
 	topic        goka.Stream = "leele-topic"
 	topicRekeyed goka.Stream = "leele-topic-rekeyed"
 	group        goka.Group  = "leele-group"
